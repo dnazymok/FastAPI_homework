@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-import users, posts
+from apps import posts, users
 
 
 def create_app():

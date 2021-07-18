@@ -1,7 +1,7 @@
-from typing import Optional, List
+from typing import List
 
 from pydantic import BaseModel
-from users.models import User
+from apps.users.models import User
 
 
 class Post(BaseModel):
