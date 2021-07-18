@@ -9,3 +9,9 @@ class Post(BaseModel):
     title: str
     body: str
     author: Optional[User]
+
+
+class CreatePostParams(BaseModel):
+    userId: int
+    title: str
+    body: str
