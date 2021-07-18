@@ -11,10 +11,11 @@ valid_data = {
 }
 
 invalid_data = {
-  "userId": "1",
-  "title": 123,
-  "body": [1, 2, 3]
+    "userId": "1",
+    "title": 123,
+    "body": [1, 2, 3]
 }
+
 
 def test_post_list():
     response = client.get("/posts")
