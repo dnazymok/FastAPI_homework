@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter, Depends
 
 from posts.dependencies import PostRepository, get_post_repository
-from posts.models import Post, CreatePostParams, DetailPost
+from posts.models import Post, CreatePostParams, DetailPost, UpdatePostParams
 
 router = APIRouter()
 
@@ -23,4 +23,9 @@ async def particular_post(id_: int, repository: PostRepository = Depends(get_pos
 @router.post("/", response_model=Post, status_code=201)
 async def create_user(params: CreatePostParams, repository: PostRepository = Depends(get_post_repository)):
     post = await repository.create_post(params)
+    return post
+
+@router.patch("/{id}", status_code=200)
+async def update_post(post: UpdatePostParams, id_: int, repository: PostRepository = Depends(get_post_repository)):
+    post = await repository.update_post(post, id_)
     return post

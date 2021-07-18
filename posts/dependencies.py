@@ -1,7 +1,7 @@
 import aiohttp
 
 from typing import Any, Dict, List
-from .models import Post, CreatePostParams, DetailPost
+from .models import Post, CreatePostParams, DetailPost, UpdatePostParams
 
 
 class PostRepository:
@@ -18,9 +18,13 @@ class PostRepository:
         raw_post = await self._create_post(post)
         return self._convert_post(raw_post)
 
-    async def detail_post(self, id_: int):
+    async def detail_post(self, id_: int) -> DetailPost:
         raw_post = await self._detail_post(id_)
         return DetailPost(**raw_post)
+
+    async def update_post(self, post: UpdatePostParams, id_: int):
+        raw_post = await self._update_post(post, id_)
+        return raw_post
 
     async def _list_posts(self):
         async with aiohttp.ClientSession() as session:
@@ -46,6 +50,12 @@ class PostRepository:
             raw_post = await post_resp.json()
             raw_post["comments"] = await self._get_comments(id_)
             raw_post["author"] = await self._get_author(raw_post["userId"])
+            return raw_post
+
+    async def _update_post(self, post: UpdatePostParams, id_: int) -> Dict[str, Any]:
+        async with aiohttp.ClientSession() as session:
+            post_resp = await session.patch(self._post_endpoint + f"/{id_}", json=post.dict())
+            raw_post = await post_resp.json()
             return raw_post
 
     async def _get_author(self, id_: int) -> Dict[str, Any]:

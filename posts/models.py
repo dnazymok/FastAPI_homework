@@ -19,3 +19,8 @@ class CreatePostParams(BaseModel):
 
 class DetailPost(Post):
     comments: List
+
+
+class UpdatePostParams(BaseModel):
+    title: str
+    body: str
