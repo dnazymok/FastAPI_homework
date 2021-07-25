@@ -40,8 +40,8 @@ class PostRepository:
         author_resp = await self._session.get(self._author_endpoint)
         raw_posts = await post_resp.json()
         raw_authors = await author_resp.json()
-        await self._match_authors_and_posts(raw_posts, raw_authors)
-        return raw_posts
+        posts = await self._match_authors_and_posts(raw_posts, raw_authors)
+        return posts
 
     async def _create_post(self, post: CreatePostParams) -> Dict[str, Any]:
         post_resp = await self._session.post(self._post_endpoint,
@@ -82,10 +82,13 @@ class PostRepository:
         return comments
 
     async def _match_authors_and_posts(self, raw_posts, raw_authors):
+        posts = []
         for post in raw_posts:
             for author in raw_authors:
                 if post["userId"] == author["id"]:
                     post["author"] = author
+                    posts.append(post)
+        return posts
 
     def _convert_post(self, raw_post: Dict[str, Any]) -> Post:
         return Post(**raw_post)
